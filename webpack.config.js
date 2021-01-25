@@ -3,8 +3,6 @@ const { MiniHtmlWebpackPlugin } = require('mini-html-webpack-plugin')
 const { WebpackPluginServe } = require('webpack-plugin-serve')
 
 module.exports = {
-  // Enable if using HTML5 History based routing
-  // historyFallback: true,
   watch: mode === 'development',
   // enable if `watch` isn't working, or you're on a container w/o file events
   // watchOptions: {
