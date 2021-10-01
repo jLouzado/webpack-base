@@ -1,24 +1,30 @@
 const { mode } = require('webpack-nano/argv')
-const { MiniHtmlWebpackPlugin } = require('mini-html-webpack-plugin')
-const { WebpackPluginServe } = require('webpack-plugin-serve')
+const { merge } = require('webpack-merge')
+const parts = require('./webpack.parts')
 
-module.exports = {
-  watch: mode === 'development',
-  // enable if `watch` isn't working, or you're on a container w/o file events
-  // watchOptions: {
-  //   aggregateTimeout: 300, // Delay the first rebuild (in ms)
-  //   poll: 1000, // Poll using interval (in ms or a boolean)
-  //   ignored: /node_modules/ // Ignore to decrease CPU usage
-  // },
-  entry: ['./src', 'webpack-plugin-serve/client'],
-  mode,
-  plugins: [
-    new MiniHtmlWebpackPlugin({ context: { title: 'Webpack Base' } }),
-    new WebpackPluginServe({
-      port: process.env.PORT || 8080,
-      static: './dist',
-      liveReload: true,
-      waitForBuild: true
-    })
-  ]
+const commonConfig = merge([
+  { entry: ['./src'] },
+  parts.page({ title: 'Demo' })
+])
+
+const productionConfig = merge([])
+
+const developmentConfig = merge([
+  {
+    entry: ['webpack-plugin-serve/client']
+  },
+  parts.devServer()
+])
+
+const getConfig = (mode) => {
+  switch (mode) {
+    case 'production':
+      return merge(commonConfig, productionConfig, { mode })
+    case 'development':
+      return merge(commonConfig, developmentConfig, { mode })
+    default:
+      throw new Error(`Unknown mode, ${mode}`)
+  }
 }
+
+module.exports = getConfig(mode)
