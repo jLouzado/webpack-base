@@ -1,4 +1,4 @@
 import component from './component'
-import styles from './main.css'
+import './main.scss'
 
 document.body.appendChild(component())
