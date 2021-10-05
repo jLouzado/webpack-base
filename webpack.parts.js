@@ -22,6 +22,31 @@ exports.loadCSS = () => ({
     rules: [
       {
         test: /\.s[ac]ss$/,
+        use: [
+          'style-loader',
+          {
+            loader: 'css-loader',
+            options: {
+              sourceMap: true
+            }
+          },
+          {
+            loader: 'sass-loader',
+            options: {
+              sourceMap: true
+            }
+          }
+        ]
+      }
+    ]
+  }
+})
+
+exports.buildCSS = () => ({
+  module: {
+    rules: [
+      {
+        test: /\.s[ac]ss$/,
         use: ['style-loader', 'css-loader', 'sass-loader']
       }
     ]
